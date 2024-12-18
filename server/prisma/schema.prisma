@@ -9,3 +9,50 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model Company {
+  cnpj        String @id
+  socialName  String @unique
+  fantasyName String
+
+  @@map("company")
+}
+
+model ExternalSupplier {
+  code        String  @id
+  name        String
+  withholding Decimal
+
+  @@map("externalSupplier")
+}
+
+model Contract {
+  id            String   @id @default(uuid())
+  title         String
+  receiptNumber Int      @unique
+  emissionDate  DateTime
+  finalDate     DateTime
+  value         Decimal
+  issqn         Decimal?
+  irrf          Decimal?
+  csll          Decimal?
+  cofins        Decimal?
+  inss          Decimal?
+  pis           Decimal?
+
+  @@map("contract")
+}
+
+model SupplierContractPivot {
+  id String @id @default(uuid())
+
+  @@map("supplierContractPivot")
+}
+
+model FeeNotes {
+  id   String @id @default(uuid())
+  name String
+  file String
+
+  @@map("feeNotes")
+}
