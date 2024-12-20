@@ -1,13 +1,14 @@
-import { time } from "console";
-import fastify from "fastify";
-import { z } from "zod";
+import fastify, { FastifyInstance } from "fastify";
 
-const app = fastify();
+import { companyControllers } from "./interfaces/controllers/company.controller.ts";
+import { contractControllers } from "./interfaces/controllers/contract.controller.ts";
+import { contractInfoController } from "./interfaces/controllers/contractInfo.controller.ts";
 
-app.post("/companies", (request, reply) => {
-  const createCompanySchema = z.object({});
-  return request.body;
-});
+const app: FastifyInstance = fastify();
+
+app.register(companyControllers, { prefix: "/companies" });
+app.register(contractControllers, { prefix: "/contracts" });
+app.register(contractInfoController, { prefix: "/contract-infos" });
 
 app.listen({ port: 3333 }).then(() => {
   console.log("Server rodando em http://localhost:3333");

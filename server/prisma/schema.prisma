@@ -11,48 +11,59 @@ datasource db {
 }
 
 model Company {
-  cnpj        String @id
+  id          String @id @default(uuid())
+  cnpj        String @unique
   socialName  String @unique
   fantasyName String
+
+  Contract Contract[]
 
   @@map("company")
 }
 
-model ExternalSupplier {
-  code        String  @id
-  name        String
-  withholding Decimal
-
-  @@map("externalSupplier")
-}
-
 model Contract {
-  id            String   @id @default(uuid())
-  title         String
-  receiptNumber Int      @unique
-  emissionDate  DateTime
-  finalDate     DateTime
-  value         Decimal
-  issqn         Decimal?
-  irrf          Decimal?
-  csll          Decimal?
-  cofins        Decimal?
-  inss          Decimal?
-  pis           Decimal?
+  id          String @id @default(uuid())
+  code        String
+  title       String @unique
+  withholding Float
+
+  companyCnpj String
+  company     Company @relation(fields: [companyCnpj], references: [cnpj])
+
+  ContractInfo ContractInfo[]
 
   @@map("contract")
 }
 
-model SupplierContractPivot {
-  id String @id @default(uuid())
+model ContractInfo {
+  id                    String   @id @default(uuid())
+  receiptNumber         Int
+  emissionDate          DateTime
+  finalDate             DateTime
+  value                 Float
+  issqn                 Float?
+  irrf                  Float?
+  csll                  Float?
+  cofins                Float?
+  inss                  Float?
+  pis                   Float?
+  calculatedWithholding Float?
 
-  @@map("supplierContractPivot")
+  contractId String
+  contract   Contract @relation(fields: [contractId], references: [id])
+
+  ReceiptNotes ReceiptNotes[]
+
+  @@map("contractInfo")
 }
 
-model FeeNotes {
+model ReceiptNotes {
   id   String @id @default(uuid())
   name String
   file String
 
-  @@map("feeNotes")
+  contractInfoId String
+  contractInfo   ContractInfo @relation(fields: [contractInfoId], references: [id])
+
+  @@map("receiptNotes")
 }
