@@ -6,23 +6,53 @@ import {
 } from "../../domain/value-objects/receiptNote.ts";
 
 export class ReceiptNotesRepositoryPrisma implements ReceiptNotesRepository {
-  async create(
-    receiptNodesData: ReceiptNotesCreate[],
-  ): Promise<ReceiptNotes[]> {
-    const newReceiptNotes = await prisma.receiptNotes.createManyAndReturn({
-      data: [...receiptNodesData],
+  async create(data: ReceiptNotesCreate): Promise<ReceiptNotes> {
+    const newReceiptNote = await prisma.receiptNotes.create({
+      data: {
+        fileName: data.fileName,
+        savedFileName: data.savedFileName,
+        filePath: data.filePath,
+        contractInfoId: data.contractInfoId,
+      },
     });
 
-    return newReceiptNotes;
+    return newReceiptNote;
   }
 
-  async findReceiptNotesByFile(file: string): Promise<ReceiptNotes | null> {
+  async delete(id: string): Promise<ReceiptNotes> {
+    const file = await prisma.receiptNotes.delete({
+      where: {
+        id,
+      },
+    });
+
+    return file;
+  }
+
+  async findReceiptNotesById(id: string): Promise<ReceiptNotes | null> {
+    const file = await prisma.receiptNotes.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    return file;
+  }
+
+  async findReceiptNotesByFile(fileName: string): Promise<ReceiptNotes | null> {
     const receiptNotes = await prisma.receiptNotes.findFirst({
       where: {
-        file,
+        fileName,
       },
     });
 
     return receiptNotes;
+  }
+
+  async getAllFilesName(): Promise<string[]> {
+    const savedFiles = await prisma.receiptNotes.findMany();
+    const savedFileNames = savedFiles.map(file => file.fileName);
+
+    return savedFileNames;
   }
 }

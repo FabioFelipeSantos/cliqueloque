@@ -1,17 +1,22 @@
 export interface ReceiptNotes {
   id: string;
-  name: string;
-  file: string;
+  fileName: string;
+  savedFileName: string;
+  filePath: string;
   contractInfoId: string;
 }
 
 export interface ReceiptNotesCreate {
-  name: string;
-  file: string;
+  fileName: string;
+  savedFileName: string;
+  filePath: string;
   contractInfoId: string;
 }
 
 export interface ReceiptNotesRepository {
-  create(data: ReceiptNotesCreate[]): Promise<ReceiptNotes[]>;
+  create(data: ReceiptNotesCreate): Promise<ReceiptNotes>;
+  delete(id: string): Promise<ReceiptNotes>;
   findReceiptNotesByFile(file: string): Promise<ReceiptNotes | null>;
+  findReceiptNotesById(id: string): Promise<ReceiptNotes | null>;
+  getAllFilesName(): Promise<string[] | null>;
 }

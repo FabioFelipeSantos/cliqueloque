@@ -58,9 +58,10 @@ model ContractInfo {
 }
 
 model ReceiptNotes {
-  id   String @id @default(uuid())
-  name String
-  file String
+  id            String @id @default(uuid())
+  fileName      String
+  savedFileName String
+  filePath      String
 
   contractInfoId String
   contractInfo   ContractInfo @relation(fields: [contractInfoId], references: [id])
