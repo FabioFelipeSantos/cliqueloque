@@ -1,15 +1,19 @@
+import { ContractInfoRepository } from "../../domain/value-objects/contractInfo.ts";
 import {
   ReceiptNotes,
   ReceiptNotesCreate,
   ReceiptNotesRepository,
 } from "../../domain/value-objects/receiptNote.ts";
+import { ContractInfoRepositoryPrisma } from "../../infrastructure/repositories/contractInfo.repository.ts";
 import { ReceiptNotesRepositoryPrisma } from "../../infrastructure/repositories/receiptNotes.repository.ts";
 
 export class ReceiptNotesCommands {
-  receiptNotesRepository: ReceiptNotesRepository;
+  private receiptNotesRepository: ReceiptNotesRepository;
+  private contractInfoRepository: ContractInfoRepository;
 
   constructor() {
     this.receiptNotesRepository = new ReceiptNotesRepositoryPrisma();
+    this.contractInfoRepository = new ContractInfoRepositoryPrisma();
   }
 
   async create({
@@ -55,5 +59,23 @@ export class ReceiptNotesCommands {
     }
 
     return savedFileName;
+  }
+
+  async getReceiptByContract(contractInfoId: string) {
+    const contractInfo =
+      this.contractInfoRepository.findContractInfoById(contractInfoId);
+
+    if (!contractInfo) {
+      throw new Error("Não há contrato com o id procurado");
+    }
+
+    const receiptNotes =
+      await this.receiptNotesRepository.getReceiptByContract(contractInfoId);
+
+    if (!receiptNotes) {
+      throw new Error("Não há notas fiscais para este contrato");
+    }
+
+    return receiptNotes;
   }
 }

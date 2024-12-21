@@ -34,4 +34,5 @@ export interface ContractInfoRepository {
   findContractInfoByReceiptNumber(
     receiptNumber: number,
   ): Promise<ContractInfo | null>;
+  findContractInfoById(id: string): Promise<ContractInfo | null>;
 }

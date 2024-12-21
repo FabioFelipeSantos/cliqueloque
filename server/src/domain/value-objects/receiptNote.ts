@@ -19,4 +19,7 @@ export interface ReceiptNotesRepository {
   findReceiptNotesByFile(file: string): Promise<ReceiptNotes | null>;
   findReceiptNotesById(id: string): Promise<ReceiptNotes | null>;
   getAllFilesName(): Promise<string[] | null>;
+  getReceiptByContract(
+    contractInfoId: string,
+  ): Promise<ReceiptNotes | ReceiptNotes[] | null>;
 }
