@@ -12,7 +12,7 @@ export class ContractRepositoryPrisma implements ContractRepository {
         code: data.code,
         title: data.title,
         withholding: data.withholding,
-        companyCnpj: data.companyCnpj,
+        companyId: data.companyId,
       },
     });
 
@@ -20,21 +20,25 @@ export class ContractRepositoryPrisma implements ContractRepository {
   }
 
   async findAllContracts(
-    companyCnpj: string,
+    companyId: string,
   ): Promise<Contract | Contract[] | null> {
     const result = await prisma.contract.findMany({
       where: {
-        companyCnpj,
+        companyId,
       },
     });
 
     return result || null;
   }
 
-  async findContractByTitle(title: string): Promise<Contract | null> {
+  async findContractByTitle(
+    title: string,
+    companyId: string,
+  ): Promise<Contract | null> {
     const result = await prisma.contract.findFirst({
       where: {
         title,
+        companyId,
       },
     });
 

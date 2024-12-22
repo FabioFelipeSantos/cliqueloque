@@ -20,16 +20,16 @@ export class ContractCommands {
     code,
     title,
     withholding,
-    companyCnpj,
+    companyId,
   }: ContractCreate): Promise<Contract> {
-    const company = await this.companyRepository.findByCnpj(companyCnpj);
+    const company = await this.companyRepository.findById(companyId);
 
     if (!company) {
       throw new Error("Empresa não localizada pelo CNPJ");
     }
 
     const doesExistContractWithThisTitle =
-      await this.contractRepository.findContractByTitle(title);
+      await this.contractRepository.findContractByTitle(title, companyId);
 
     if (doesExistContractWithThisTitle) {
       throw new Error("Já existe um contrato com esse título");
@@ -39,21 +39,20 @@ export class ContractCommands {
       code,
       title,
       withholding,
-      companyCnpj,
+      companyId,
     });
 
     return newContract;
   }
 
-  async findAllContractsByCompany(companyCnpj: string) {
-    const company = await this.companyRepository.findByCnpj(companyCnpj);
+  async findAllContractsByCompany(companyId: string) {
+    const company = await this.companyRepository.findByCnpj(companyId);
 
     if (!company) {
       throw new Error("Essa empresa não existe. Verifique o CNPJ");
     }
 
-    const contracts =
-      await this.contractRepository.findAllContracts(companyCnpj);
+    const contracts = await this.contractRepository.findAllContracts(companyId);
 
     if (!contracts) {
       throw new Error("Esta empresa ainda não possui contratos cadastrados");

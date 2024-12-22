@@ -37,4 +37,10 @@ export class CompanyRepositoryPrisma implements CompanyRepository {
 
     return company || null;
   }
+
+  async getAllCompanies(): Promise<Company[] | null> {
+    const companies = await prisma.company.findMany();
+
+    return companies || null;
+  }
 }

@@ -16,7 +16,6 @@ export const multerConfig = multer({
       "image/jpg",
       "image/jpeg",
       "image/png",
-      "text/plain",
     ];
 
     if (allowedMimes.includes(file.mimetype)) {

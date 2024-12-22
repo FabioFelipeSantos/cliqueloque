@@ -7,9 +7,11 @@ import { companyControllers } from "./interfaces/controllers/company.controller.
 import { contractControllers } from "./interfaces/controllers/contract.controller.ts";
 import { contractInfoController } from "./interfaces/controllers/contractInfo.controller.ts";
 import { receiptNotesController } from "./interfaces/controllers/receiptNotes.controller.ts";
+import fastifyCors from "@fastify/cors";
 
 const app: FastifyInstance = fastify();
 
+app.register(fastifyCors, { origin: "*" });
 app.register(multipart);
 app.register(companyControllers, { prefix: "/companies" });
 app.register(contractControllers, { prefix: "/contracts" });

@@ -6,13 +6,53 @@
     <title>Document</title>
   </head>
   <body>
-    <form
-      action="http://localhost:3333/uploads"
-      method="post"
-      enctype="multipart/form-data"
-    >
-      <input type="file" name="file" multiple />
-      <button type="submit">Upload</button>
+    <form id="form" enctype="multipart/form-data">
+      <input
+        style="display: block; margin-bottom: 14px"
+        type="file"
+        name="file"
+        id="myFile"
+        accept="image/*"
+      />
+      <button>Upload</button>
     </form>
+    <h2 id="result"></h2>
+    <pre id="code"></pre>
+
+    <script>
+      const form = document.getElementById("form");
+
+      const sendFiles = async () => {
+        const myFile = document.getElementById("myFile").files;
+
+        const formData = new FormData();
+
+        formData.append("file", myFile[0]);
+        console.log(formData);
+
+        const response = await fetch(
+          "http://localhost:3333/uploads/401cc2ea-3b5e-456a-abec-0210c10a184d",
+          {
+            method: "POST",
+            body: formData,
+          },
+        );
+
+        const json = await response.json();
+
+        console.log("Resposta de dentro do async");
+        console.log(response);
+        console.log(json);
+        return response;
+      };
+
+      form.addEventListener("submit", async event => {
+        event.preventDefault();
+        const result = await sendFiles();
+        console.log("Resposta fora do async");
+        console.log(result);
+        // document.getElementById("result").textContent(result.)
+      });
+    </script>
   </body>
 </html>

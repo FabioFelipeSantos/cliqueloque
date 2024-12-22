@@ -24,11 +24,11 @@ model Company {
 model Contract {
   id          String @id @default(uuid())
   code        String
-  title       String @unique
+  title       String
   withholding Float
 
-  companyCnpj String
-  company     Company @relation(fields: [companyCnpj], references: [cnpj])
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
 
   ContractInfo ContractInfo[]
 

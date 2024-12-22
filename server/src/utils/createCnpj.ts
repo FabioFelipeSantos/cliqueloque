@@ -3,7 +3,7 @@ export default function createCnpj() {
 
   for (let i = 0; i < 12; i++) {
     if (i === 0) {
-      cnpj.push(Math.floor(Math.random() * 2) + 1);
+      cnpj.push(Math.floor(Math.random() * 3) + 1);
     } else if (i < 8) {
       cnpj.push(Math.floor(Math.random() * 9));
     } else if (i < 11) {
@@ -36,16 +36,19 @@ export default function createCnpj() {
   ].join("-");
 }
 
-// console.log(createCnpj());
-// console.log(createCnpj());
-// console.log(createCnpj());
-// console.log(createCnpj());
-// console.log(createCnpj());
-// console.log(createCnpj());
+// for (let i = 0; i < 10; i++) {
+//   console.log(createCnpj());
+// }
 
-// 23600072/0001-75
-// 28140530/0003-16
-// 13605004/0003-07
-// 13620654/0001-60
-// 17626015/0003-24
-// 15084506/0002-84
+/*
+23386103/0002-18
+28678182/0003-35
+34362840/0001-16
+20643130/0003-11
+16604333/0002-40
+31475866/0002-63
+28028826/0002-69
+32777640/0003-60
+24006277/0001-90
+17070407/0001-98
+*/
