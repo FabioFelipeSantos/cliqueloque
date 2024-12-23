@@ -83,9 +83,25 @@ export async function companyControllers(fastify: FastifyInstance) {
       try {
         const result = await companyCommands.findCompanyByCnpj(cnpj);
 
-        return reply.send(result);
+        const message = result
+          ? "CNPJ encontrado com sucesso..."
+          : "Empresa não cadastrada com este CNPJ";
+
+        return reply.code(200).send({
+          code: 200,
+          status: "success",
+          message,
+          company: result,
+          error: "",
+        });
       } catch (error) {
-        return reply.code(400).send({ erro: error });
+        return reply.code(400).send({
+          code: 400,
+          status: "failed",
+          message: "A empresa não foi encontrada na base de dados",
+          company: null,
+          error,
+        });
       }
     },
   );

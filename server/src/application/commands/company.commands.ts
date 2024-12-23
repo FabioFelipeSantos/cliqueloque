@@ -35,7 +35,7 @@ export class CompanyCommands {
     return newCompany;
   }
 
-  async findCompanyByCnpj(cnpj: string): Promise<Company> {
+  async findCompanyByCnpj(cnpj: string): Promise<Company | null> {
     if (cnpj.length !== 14) {
       throw new Error(
         "CNPJ com número de algarismos diferente de 14. Confira o dado.",
@@ -54,10 +54,6 @@ export class CompanyCommands {
     );
 
     const company = await this.companyRepository.findByCnpj(parsingCnpj);
-
-    if (!company) {
-      throw new Error("Empresa não cadastrada com este CNPJ");
-    }
 
     return company;
   }
