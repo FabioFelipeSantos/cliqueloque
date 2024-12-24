@@ -48,17 +48,18 @@ export async function contractControllers(fastify: FastifyInstance) {
         reply.code(200).send({
           code: 200,
           status: "success",
-          mensagem: "Contratos encontrados com sucesso",
-          contrato: contracts,
+          message: "Contratos encontrados com sucesso",
+          contract: contracts,
           erro: "",
         });
       } catch (error) {
         reply.code(400).send({
           code: 400,
           status: "failed",
-          mensagem:
-            "Não foram obtidos contratos. Leia o campo erro para mais detalhes",
-          erro: error,
+          message:
+            "Erro ao tentar buscar os contratos. Leia o campo erro para mais detalhes",
+          contract: null,
+          error,
         });
       }
     },

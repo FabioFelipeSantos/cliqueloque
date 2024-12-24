@@ -46,17 +46,15 @@ export class ContractCommands {
   }
 
   async findAllContractsByCompany(companyId: string) {
-    const company = await this.companyRepository.findByCnpj(companyId);
+    const company = await this.companyRepository.findById(companyId);
 
     if (!company) {
-      throw new Error("Essa empresa não existe. Verifique o CNPJ");
+      throw new Error(
+        "Essa empresa não existe. Pode haver algum erro com o ID. Essa é uma busca pelo ID da empresa, não CNPJ",
+      );
     }
 
     const contracts = await this.contractRepository.findAllContracts(companyId);
-
-    if (!contracts) {
-      throw new Error("Esta empresa ainda não possui contratos cadastrados");
-    }
 
     return contracts;
   }

@@ -19,6 +19,6 @@ export interface ContractRepository {
     title: string,
     companyId: string,
   ): Promise<Contract | null>;
-  findAllContracts(companyId: string): Promise<Contract | Contract[] | null>;
+  findAllContracts(companyId: string): Promise<Contract[] | null>;
   findContractById(id: string): Promise<Contract | null>;
 }

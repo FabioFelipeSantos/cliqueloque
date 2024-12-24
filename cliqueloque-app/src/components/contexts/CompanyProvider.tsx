@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode } from "react";
+import { createContext, useState, ReactNode, useEffect } from "react";
 
 type CompanyProviderProps = {
   children: ReactNode;
@@ -21,6 +21,19 @@ const CompanyContext = createContext<{
 
 const CompanyProvider = function ({ children }: CompanyProviderProps) {
   const [company, setCompany] = useState<ICompany>(defaultCompany);
+
+  useEffect(() => {
+    const storedCompany = localStorage.getItem("company");
+    if (storedCompany) {
+      setCompany(JSON.parse(storedCompany));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (company.id !== "") {
+      localStorage.setItem("company", JSON.stringify(company));
+    }
+  }, [company]);
 
   function handlingChangeCompany(company: ICompany) {
     setCompany(company);

@@ -1,21 +1,5 @@
-import { ContainerStyles } from "@/components/Container/styles";
 import { colors } from "@/globalStyle";
 import styled from "styled-components";
-
-export const LayoutContainer = styled(ContainerStyles)`
-  height: 100vh;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  & > div {
-    width: 100%;
-    padding: 12px 36px;
-
-    background-color: #fff;
-  }
-`;
 
 export const ImageContainer = styled.div`
   width: 120px;
@@ -31,6 +15,7 @@ export const ImageContainer = styled.div`
 
 export const HeaderContainer = styled.header`
   margin-bottom: 8px;
+  width: 100%;
 
   display: flex;
   flex-direction: column;
@@ -52,16 +37,43 @@ export const HeaderLogoAndTitle = styled.div`
   }
 `;
 
-export const FooterContainer = styled.footer`
+export const CompanyInfoContainer = styled.div`
+  margin-bottom: 16px;
+  padding: 12px;
+
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 
-  p {
-    width: 60%;
+  border: 1px solid red;
+  border-radius: 8px;
+`;
 
-    font-size: 14px;
-    text-align: left;
+export const NamesContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  .names-title > strong {
+    display: block;
   }
+
+  .names {
+    margin-left: 8px;
+
+    p {
+      font-style: italic;
+    }
+  }
+`;
+
+export const SubtitleStyle = styled.h2`
+  padding: 4px 0;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  border: 1px solid red;
+  border-radius: 8px;
 `;

@@ -19,10 +19,8 @@ export class ContractRepositoryPrisma implements ContractRepository {
     return result;
   }
 
-  async findAllContracts(
-    companyId: string,
-  ): Promise<Contract | Contract[] | null> {
-    const result = await prisma.contract.findMany({
+  async findAllContracts(companyId: string): Promise<Contract[] | null> {
+    const [...result] = await prisma.contract.findMany({
       where: {
         companyId,
       },

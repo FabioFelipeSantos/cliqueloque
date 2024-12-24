@@ -19,7 +19,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { login } from "@/utils/serverQueries/login";
 import { useState } from "react";
-import { PulseLoader } from "react-spinners";
 import { useNavigate } from "react-router";
 import {
   AlertDialog,
@@ -33,7 +32,7 @@ import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
 import { useCompany } from "@/components/contexts/useCompany";
 
 import logo from "./../../assets/logo.png";
-import { colors } from "@/globalStyle";
+import PulseSpinner from "@/components/PulseSpinner";
 
 type CnpjForm = {
   cnpj: string;
@@ -65,7 +64,7 @@ export default function Login() {
   const form = useForm<CnpjForm>({
     resolver: zodResolver(formValidation),
     defaultValues: {
-      cnpj: "",
+      cnpj: "17070407000198",
     },
   });
 
@@ -84,6 +83,7 @@ export default function Login() {
         setOpen(true);
       } else {
         handlingChangeCompany(requestedCompanyResult.company);
+
         navigate(`company/${requestedCompanyResult.company.id}`);
 
         form.reset();
@@ -105,7 +105,7 @@ export default function Login() {
       <CardContainer>
         <Card className="w-4/6 p-8 border shadow-card border-slate-500">
           <CardTitle className="flex flex-col items-center justify-center w-full">
-            <div className={`bg-[${colors.logoBgColor}] w-44 mb-6 p-2`}>
+            <div className="bg-[#0d455f] w-44 mb-6 p-2">
               <img src={logo} alt="Logo Clique Loque" />
             </div>
             <h1 className="mb-4">Pagamento de Fornecedor</h1>
@@ -148,12 +148,7 @@ export default function Login() {
                 </form>
               </Form>
             ) : (
-              <PulseLoader
-                color="#0d455fbf"
-                margin={12}
-                size={12}
-                speedMultiplier={0.8}
-              />
+              <PulseSpinner />
             )}
           </CardDescription>
         </Card>
