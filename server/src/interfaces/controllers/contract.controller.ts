@@ -64,4 +64,32 @@ export async function contractControllers(fastify: FastifyInstance) {
       }
     },
   );
+
+  fastify.get<{ Params: { contractId: string } }>(
+    "/contract/:contractId",
+    async (request, reply) => {
+      try {
+        const { contractId } = request.params;
+
+        const contract = await contractCommands.findContractById(contractId);
+
+        reply.code(200).send({
+          code: 200,
+          status: "success",
+          message: "Contrato encontrado com sucesso",
+          contract: contract,
+          erro: "",
+        });
+      } catch (error) {
+        reply.code(400).send({
+          code: 400,
+          status: "failed",
+          message:
+            "Erro ao tentar buscar os contratos. Leia o campo erro para mais detalhes",
+          contract: null,
+          error,
+        });
+      }
+    },
+  );
 }

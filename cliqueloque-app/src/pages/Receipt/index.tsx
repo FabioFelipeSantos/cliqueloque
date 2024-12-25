@@ -4,7 +4,9 @@ import { ReceiptContainer } from "./styles";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
+import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { convertingToBrazilianCurrency } from "@/utils/convertingToBrazilianCurrency";
 
 interface ReceiptForm {
   receiptNumber: number;
@@ -20,9 +22,9 @@ interface ReceiptForm {
   calculatedWithholding?: number | null;
 }
 
-interface ReceiptCreateInfo extends ReceiptForm {
-  contractId: string;
-}
+// interface ReceiptCreateInfo extends ReceiptForm {
+//   contractId: string;
+// }
 
 const formValidation = z.object({
   receiptNumber: z
@@ -58,25 +60,52 @@ const formValidation = z.object({
 
 export default function Receipts() {
   const { company } = useCompany();
+  const { contractId } = useParams<{ contractId: string }>() as {
+    contractId: string;
+  };
+
+  const [contract, setContract] = useState<IContract>({
+    id: "",
+    code: "",
+    title: "",
+    companyId: "",
+    withholding: 0,
+  });
+
+  useEffect(() => {
+    const getContract = async () => {
+      const contractFetchURL = `${import.meta.env.VITE_SERVER_URL}/contracts/contract/${contractId}`;
+      const response = await fetch(contractFetchURL);
+
+      if (response.ok) {
+        const { contract }: { contract: IContract } = await response.json();
+
+        setContract(contract);
+      }
+    };
+
+    getContract();
+  }, [contractId]);
 
   const {
+    getValues,
     register,
     handleSubmit,
-    formState: { errors, isDirty },
+    // formState: { errors, isDirty, touchedFields },
   } = useForm<ReceiptForm>({
     resolver: zodResolver(formValidation),
     defaultValues: {
-      receiptNumber: "",
-      emissionDate: "",
-      finalDate: "",
-      receiptValue: "",
-      issqn: "",
-      irrf: "",
-      csll: "",
-      cofins: "",
-      inss: "",
-      pis: "",
-      calculatedWithholding: "",
+      receiptNumber: 0,
+      emissionDate: new Date(),
+      finalDate: new Date(),
+      receiptValue: 0,
+      issqn: null,
+      irrf: null,
+      csll: null,
+      cofins: null,
+      inss: null,
+      pis: null,
+      calculatedWithholding: null,
     },
   });
 
@@ -97,98 +126,120 @@ export default function Receipts() {
             <h3>Título desse contrato</h3>
           </div>
 
-          <Form {...form}>
-            <form
-              action=""
-              onSubmit={form.handleSubmit(handlingFormSubmission)}
-              encType="multipart/form-data"
-            >
-              {/* Valores iniciais */}
+          <form
+            onSubmit={handleSubmit(handlingFormSubmission)}
+            encType="multipart/form-data"
+          >
+            {/* Valores iniciais */}
+            <div>
               <div>
-                <div>
-                  <label htmlFor="">Número da Nota</label>
-                  <input type="number" />
-                </div>
-                <div>
-                  <label htmlFor="">Data de Emissão</label>
-                  <input type="date" />
-                </div>
-                <div>
-                  <label htmlFor="">Data de Vencimento</label>
-                  <input type="date" />
-                </div>
-                <div>
-                  <label htmlFor="">Valor</label>
-                  <input type="number" step="0.01" />
-                </div>
+                <label htmlFor="receiptNumber">Número da Nota</label>
+                <input
+                  id="receiptNumber"
+                  type="number"
+                  {...register("receiptNumber")}
+                />
               </div>
+              <div>
+                <label htmlFor="emissionDate">Data de Emissão</label>
+                <input
+                  id="emissionDate"
+                  type="date"
+                  {...register("emissionDate")}
+                />
+              </div>
+              <div>
+                <label htmlFor="finalDate">Data de Vencimento</label>
+                <input id="finalDate" type="date" {...register("finalDate")} />
+              </div>
+              <div>
+                <label htmlFor="receiptValue">Valor</label>
+                <input
+                  id="receiptValue"
+                  type="number"
+                  step="0.01"
+                  {...register("receiptValue")}
+                />
+              </div>
+            </div>
 
-              {/* Retenção de impostos */}
+            {/* Retenção de impostos */}
+            <div>
+              <input type="checkbox" name="" id="" />
+              <label htmlFor="">Retenção de Impostos</label>
+            </div>
+            <div>
+              <h4>Dados</h4>
               <div>
-                <input type="checkbox" name="" id="" />
-                <label htmlFor="">Retenção de Impostos</label>
-              </div>
-              <div>
-                <h4>Dados</h4>
                 <div>
-                  <div>
-                    <label htmlFor="">ISSQN</label>
-                    <input type="number" name="" id="" />
-                  </div>
-                  <div>
-                    <label htmlFor="">IRRF</label>
-                    <input type="number" name="" id="" />
-                  </div>
-                  <div>
-                    <label htmlFor="">CSLL</label>
-                    <input type="number" name="" id="" />
-                  </div>
-                  <div>
-                    <label htmlFor="">COFINS</label>
-                    <input type="number" name="" id="" />
-                  </div>
-                  <div>
-                    <label htmlFor="">INSS</label>
-                    <input type="number" name="" id="" />
-                  </div>
-                  <div>
-                    <label htmlFor="">PIS</label>
-                    <input type="number" name="" id="" />
-                  </div>
+                  <label htmlFor="issqn">ISSQN</label>
+                  <input type="number" id="issqn" {...register("issqn")} />
+                </div>
+                <div>
+                  <label htmlFor="irrf">IRRF</label>
+                  <input type="number" id="irrf" {...register("irrf")} />
+                </div>
+                <div>
+                  <label htmlFor="csll">CSLL</label>
+                  <input type="number" id="csll" {...register("csll")} />
+                </div>
+                <div>
+                  <label htmlFor="cofins">COFINS</label>
+                  <input type="number" id="cofins" {...register("cofins")} />
+                </div>
+                <div>
+                  <label htmlFor="inss">INSS</label>
+                  <input type="number" id="inss" {...register("inss")} />
+                </div>
+                <div>
+                  <label htmlFor="pis">PIS</label>
+                  <input type="number" id="pis" {...register("pis")} />
                 </div>
               </div>
+            </div>
 
-              {/* Retenção Técnica */}
+            {/* Retenção Técnica */}
+            <div>
+              <input type="checkbox" name="" id="" />
+              <label htmlFor="">Retenção Técnica</label>
+            </div>
+            <div>
+              <h4>Dados</h4>
               <div>
-                <input type="checkbox" name="" id="" />
-                <label htmlFor="">Retenção Técnica</label>
-              </div>
-              <div>
-                <h4>Dados</h4>
                 <div>
-                  <div>
-                    <label htmlFor="">Valor</label>
-                    <input type="number" name="" id="" />
-                  </div>
-                  <div>
-                    <label htmlFor="">Percentual</label>
-                    <input type="number" name="" id="" />
-                  </div>
+                  <label htmlFor="tecRetention">Valor</label>
+                  <input
+                    type="string"
+                    id="tecRetention"
+                    value={convertingToBrazilianCurrency(
+                      getValues("receiptValue") * contract.withholding,
+                    )}
+                    disabled
+                  />
+                </div>
+                <div>
+                  <label htmlFor="withholding">Percentual</label>
+                  <input
+                    type="string"
+                    id="withholding"
+                    value={(contract.withholding * 100).toFixed(2)}
+                    disabled
+                  />
                 </div>
               </div>
+            </div>
 
-              {/* Notas fiscais */}
-              <div>
-                <button type="button">Anexar Nota Fiscal</button>
-                <ul>
-                  <li>
-                    <button>Lixo</button>
-                    <p>Nome do arquivo</p>
-                  </li>
-                </ul>
-              </div>
-            </form>
-          </Form>
+            {/* Notas fiscais */}
+            <div>
+              <button type="button">Anexar Nota Fiscal</button>
+              <ul>
+                <li>
+                  <button>Lixo</button>
+                  <p>Nome do arquivo</p>
+                </li>
+              </ul>
+            </div>
+          </form>
         </div>
       </div>
     </ReceiptContainer>
