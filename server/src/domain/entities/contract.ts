@@ -4,6 +4,7 @@ export interface Contract {
   title: string;
   withholding: number;
   companyId: string;
+  hasInfo: boolean;
 }
 
 export interface ContractCreate {
@@ -21,4 +22,5 @@ export interface ContractRepository {
   ): Promise<Contract | null>;
   findAllContracts(companyId: string): Promise<Contract[] | null>;
   findContractById(id: string): Promise<Contract | null>;
+  changeHasInfo(contractId: string): Promise<void>;
 }

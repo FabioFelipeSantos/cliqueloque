@@ -22,10 +22,11 @@ model Company {
 }
 
 model Contract {
-  id          String @id @default(uuid())
+  id          String  @id @default(uuid())
   code        String
   title       String
   withholding Float
+  hasInfo     Boolean @default(false)
 
   companyId String
   company   Company @relation(fields: [companyId], references: [id])
@@ -48,6 +49,7 @@ model ContractInfo {
   inss                  Float?
   pis                   Float?
   calculatedWithholding Float?
+  registerNumber        String
 
   contractId String
   contract   Contract @relation(fields: [contractId], references: [id])

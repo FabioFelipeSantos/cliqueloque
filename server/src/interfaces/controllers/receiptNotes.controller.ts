@@ -7,8 +7,8 @@ import fs from "fs";
 export async function receiptNotesController(fastify: FastifyInstance) {
   const receiptNotesCommands = new ReceiptNotesCommands();
 
-  fastify.post<{ Params: { id: string } }>(
-    "/:id",
+  fastify.post<{ Params: { contractInfoId: string } }>(
+    "/:contractInfoId",
     { preHandler: multerConfig.single("file") },
     async (request, reply) => {
       const file = (request as any).file;
@@ -17,33 +17,40 @@ export async function receiptNotesController(fastify: FastifyInstance) {
         return reply.status(200).send({ info: "Nenhum arquivo foi enviado" });
       }
 
-      const { id } = request.params;
+      const { contractInfoId } = request.params;
       const newFile = {
         fileName: file.originalname,
         savedFileName: file.filename,
         filePath: file.path,
-        contractInfoId: id,
+        contractInfoId: contractInfoId,
       };
 
       const arquivo = await receiptNotesCommands.create(newFile);
 
-      reply
-        .status(200)
-        .send({ mensagem: "Arquivos enviados com sucesso!", arquivo });
+      return reply.code(200).send({
+        code: 200,
+        status: "success",
+        message: "Arquivo salvo com sucesso",
+        file: newFile,
+        error: "",
+      });
     },
   );
 
-  fastify.delete<{ Params: { id: string } }>("/:id", async (request, reply) => {
-    try {
-      const { id } = request.params;
-      const deletedFile = await receiptNotesCommands.delete(id);
-      fs.rmSync(deletedFile.filePath);
+  fastify.delete<{ Params: { receiptNoteId: string } }>(
+    "/:receiptNoteId",
+    async (request, reply) => {
+      try {
+        const { receiptNoteId } = request.params;
+        const deletedFile = await receiptNotesCommands.delete(receiptNoteId);
+        fs.rmSync(deletedFile.filePath);
 
-      return reply
-        .status(200)
-        .send(`Arquivo ${deletedFile.fileName} apagado com sucesso`);
-    } catch (error) {
-      return reply.status(400).send(error);
-    }
-  });
+        return reply
+          .status(200)
+          .send(`Arquivo ${deletedFile.fileName} apagado com sucesso`);
+      } catch (error) {
+        return reply.status(400).send(error);
+      }
+    },
+  );
 }

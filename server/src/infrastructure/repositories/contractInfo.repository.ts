@@ -4,11 +4,15 @@ import {
   ContractInfoCreate,
   ContractInfoRepository,
 } from "../../domain/value-objects/contractInfo.ts";
+import crypto from "crypto";
 
 export class ContractInfoRepositoryPrisma implements ContractInfoRepository {
   async create(data: ContractInfoCreate): Promise<ContractInfo> {
+    const registerNumber = crypto.randomBytes(4).toString("hex");
+
     const newContractInfo = await prisma.contractInfo.create({
       data: {
+        registerNumber,
         ...data,
       },
     });

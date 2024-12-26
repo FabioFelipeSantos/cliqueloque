@@ -37,6 +37,7 @@ export class ContractInfoCommands {
     }
 
     const newContractInfo = this.contractInfoRepository.create(data);
+    await this.contractRepository.changeHasInfo(data.contractId);
 
     return newContractInfo;
   }

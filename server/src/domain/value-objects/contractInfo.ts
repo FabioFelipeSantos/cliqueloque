@@ -12,6 +12,7 @@ export interface ContractInfo {
   pis?: number | null;
   calculatedWithholding?: number | null;
   contractId: string;
+  registerNumber: string;
 }
 
 export interface ContractInfoCreate {

@@ -52,4 +52,15 @@ export class ContractRepositoryPrisma implements ContractRepository {
 
     return contract || null;
   }
+
+  async changeHasInfo(contractId: string): Promise<void> {
+    await prisma.contract.update({
+      where: {
+        id: contractId,
+      },
+      data: {
+        hasInfo: true,
+      },
+    });
+  }
 }

@@ -64,7 +64,7 @@ export default function Login() {
   const form = useForm<CnpjForm>({
     resolver: zodResolver(formValidation),
     defaultValues: {
-      cnpj: "17070407000198",
+      cnpj: "",
     },
   });
 

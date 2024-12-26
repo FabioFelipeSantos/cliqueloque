@@ -1,32 +1,38 @@
-import { Control, useController } from "react-hook-form";
-import { ErrorMessage } from "@hookform/error-message";
+import { useController, UseControllerProps } from "react-hook-form";
+import { ReceiptForm } from "@/pages/Receipt";
+import { InputFormContainer } from "./styles";
 
 type InputProps = {
   label: string;
-  name: string;
-  control: Control;
+  propsController: UseControllerProps<ReceiptForm>;
 };
 
-export default function InputForm({ label, name, control }: InputProps) {
+const inputsAsDate = ["emissionDate", "finalDate"];
+
+function formatReceiptInputsInfo(value: string, inputName: string) {
+  if (inputsAsDate.includes(inputName)) return value;
+
+  return value.replace(/[^0-9.,]/g, "");
+}
+
+export default function InputForm({ label, propsController }: InputProps) {
   const {
-    field,
-    fieldState: { isTouched },
-    formState: { errors },
-  } = useController({
-    name,
-    control,
-  });
+    field: { value, ...field },
+    fieldState: { isDirty, isTouched, error },
+  } = useController({ ...propsController });
+
   return (
-    <div>
-      <label htmlFor={name}>{label}</label>
-      <input type="text" id={name} {...field} />
-      {isTouched && (
-        <ErrorMessage
-          name={name}
-          errors={errors}
-          render={({ message }) => <span>{message}</span>}
-        />
-      )}
-    </div>
+    <InputFormContainer>
+      <label htmlFor={field.name}>{label}</label>
+      <input
+        className={isTouched && error ? "is-error" : ""}
+        style={field.name === "receiptValue" ? { textAlign: "right" } : {}}
+        type={inputsAsDate.includes(field.name) ? "date" : "string"}
+        id={field.name}
+        value={formatReceiptInputsInfo(value, field.name)}
+        {...field}
+      />
+      {(isDirty || isTouched) && <span>{error?.message}</span>}
+    </InputFormContainer>
   );
 }

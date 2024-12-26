@@ -126,41 +126,44 @@ export default function Contracts() {
               </TableHeader>
 
               <TableBody>
-                {contracts.map((contract, index) => (
-                  <TableRow
-                    key={contract.id}
-                    className={`${index % 2 === 0 ? "bg-[#eeea]" : "bg-[#ddda]"} hover:bg-[#dde]`}
-                  >
-                    <TableCell>
-                      <div className="flex items-center justify-center mx-2">
-                        <Checkbox
-                          className="size-6"
-                          onCheckedChange={checked =>
-                            handlingChangeInput(checked, contract)
-                          }
-                        />
-                      </div>
-                    </TableCell>
+                {contracts.map(
+                  (contract, index) =>
+                    !contract.hasInfo && (
+                      <TableRow
+                        key={contract.id}
+                        className={`${index % 2 === 0 ? "bg-[#eeea]" : "bg-[#ddda]"} hover:bg-[#dde]`}
+                      >
+                        <TableCell>
+                          <div className="flex items-center justify-center mx-2">
+                            <Checkbox
+                              className="size-6"
+                              onCheckedChange={checked =>
+                                handlingChangeInput(checked, contract)
+                              }
+                            />
+                          </div>
+                        </TableCell>
 
-                    <TableCell className="w-4/12 text-left">
-                      {contract.title}
-                    </TableCell>
+                        <TableCell className="w-4/12 text-left">
+                          {contract.title}
+                        </TableCell>
 
-                    <TableCell>{contract.code}</TableCell>
+                        <TableCell>{contract.code}</TableCell>
 
-                    <TableCell className="mx-[auto] flex justify-center">
-                      <div className="bg-[#2c70b9] w-9/12 text-white font-bold border-2 border-[#2c70b9]">
-                        {`${(contract.withholding * 100).toFixed(2).replace(/(.+)\.(.*)/, "$1,$2")}%`}
-                      </div>
-                    </TableCell>
+                        <TableCell className="mx-[auto] flex justify-center">
+                          <div className="bg-[#2c70b9] w-9/12 text-white font-bold border-2 border-[#2c70b9]">
+                            {`${(contract.withholding * 100).toFixed(2).replace(/(.+)\.(.*)/, "$1,$2")}%`}
+                          </div>
+                        </TableCell>
 
-                    <TableCell>
-                      <Button className="bg-[#2c70b9] hover:bg-[#2288ff] px-3">
-                        <Search />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                        <TableCell>
+                          <Button className="bg-[#2c70b9] hover:bg-[#2288ff] px-3">
+                            <Search />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ),
+                )}
               </TableBody>
             </Table>
           </TableContainer>

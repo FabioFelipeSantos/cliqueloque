@@ -19,6 +19,7 @@ declare interface IContract {
   title: string;
   withholding: number;
   companyId: string;
+  hasInfo: boolean;
 }
 
 declare interface IContractServerResponse {
@@ -26,5 +27,60 @@ declare interface IContractServerResponse {
   status: string;
   message: string;
   contract: IContract[] | null;
+  erro: string;
+}
+
+declare interface IContractInfo {
+  id: string;
+  receiptNumber: number;
+  emissionDate: Date;
+  finalDate: Date;
+  value: number;
+  issqn?: number | null;
+  irrf?: number | null;
+  csll?: number | null;
+  cofins?: number | null;
+  inss?: number | null;
+  pis?: number | null;
+  calculatedWithholding?: number | null;
+  contractId: string;
+  registerNumber: string;
+}
+
+declare interface IContractInfoCreate {
+  receiptNumber: number;
+  emissionDate: string;
+  finalDate: string;
+  value: number;
+  issqn?: number | null;
+  irrf?: number | null;
+  csll?: number | null;
+  cofins?: number | null;
+  inss?: number | null;
+  pis?: number | null;
+  calculatedWithholding?: number | null;
+  contractId: string;
+}
+
+declare interface IContractInfoServerResponse {
+  code: string;
+  status: string;
+  message: string;
+  contractInfo: IContractInfo | null;
+  erro: string;
+}
+
+interface IFile {
+  fileName: string;
+  savedFileName: string;
+  filePath: string;
+  contractInfoId: string;
+}
+
+declare interface IReceiptNotesServerResponse {
+  code: string;
+  status: string;
+  message: string;
+  file: IFile;
   erro: string;
 }
