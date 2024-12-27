@@ -3,6 +3,7 @@ import { ReceiptNotesCommands } from "../../application/commands/receiptNotes.co
 import { multerConfig } from "./../../utils/multerConfig.ts";
 import { ReceiptNotesCreate } from "../../domain/value-objects/receiptNote.ts";
 import fs from "fs";
+import path from "path";
 
 export async function receiptNotesController(fastify: FastifyInstance) {
   const receiptNotesCommands = new ReceiptNotesCommands();
@@ -50,6 +51,50 @@ export async function receiptNotesController(fastify: FastifyInstance) {
           .send(`Arquivo ${deletedFile.fileName} apagado com sucesso`);
       } catch (error) {
         return reply.status(400).send(error);
+      }
+    },
+  );
+
+  fastify.get<{ Params: { receiptNoteId: string } }>(
+    "/download/:receiptNoteId",
+    async (request, reply) => {
+      try {
+        const { receiptNoteId } = request.params;
+
+        const file =
+          await receiptNotesCommands.findReceiptNotesById(receiptNoteId);
+
+        const filePath = path.resolve(file.filePath);
+
+        if (!fs.existsSync(filePath)) {
+          reply.code(400).send({
+            code: 400,
+            status: "failed",
+            message: "Arquivo não encontrado no servidor",
+            file: "",
+          });
+        }
+
+        const mime = file.fileName.slice(-3);
+
+        const type = mime === "pdf" ? "application/pdf" : `image/${mime}`;
+
+        return reply
+          .code(200)
+          .header("content-type", type)
+          .header(
+            "content-disposition",
+            `attachment; filename="${file.fileName}"`,
+          )
+          .send(fs.createReadStream(filePath));
+      } catch (error) {
+        reply.code(400).send({
+          code: 400,
+          status: "failed",
+          message: "Arquivo não encontrado",
+          file: "",
+          error,
+        });
       }
     },
   );

@@ -58,7 +58,7 @@ export class ReceiptNotesRepositoryPrisma implements ReceiptNotesRepository {
 
   async getReceiptByContract(
     contractInfoId: string,
-  ): Promise<ReceiptNotes | ReceiptNotes[] | null> {
+  ): Promise<ReceiptNotes[] | null> {
     const receipts = await prisma.receiptNotes.findMany({
       where: {
         contractInfoId,

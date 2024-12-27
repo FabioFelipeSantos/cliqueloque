@@ -41,4 +41,31 @@ export class ContractInfoCommands {
 
     return newContractInfo;
   }
+
+  async findContractInfoById(id: string): Promise<ContractInfo> {
+    const contractInfo =
+      await this.contractInfoRepository.findContractInfoById(id);
+
+    if (!contractInfo) {
+      throw new Error(`Nenhum contrato com o id: ${id} foi encontrado`);
+    }
+
+    return contractInfo;
+  }
+
+  async findContractInfoByContractId(
+    contractId: string,
+  ): Promise<ContractInfo | null> {
+    const contract = await this.contractRepository.findContractById(contractId);
+
+    if (!contract)
+      throw new Error(`Não existe contrato com o id: ${contractId}.`);
+
+    const contractInfo =
+      await this.contractInfoRepository.findContractInfoByContractId(
+        contractId,
+      );
+
+    return contractInfo;
+  }
 }

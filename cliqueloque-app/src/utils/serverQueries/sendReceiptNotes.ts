@@ -5,12 +5,8 @@ export async function sendReceiptNotes(
   const responses: IReceiptNotesServerResponse[] = [];
 
   for await (const file of files) {
-    console.log(file);
-
     const formData = new FormData();
-
     formData.append("file", file);
-    console.log(formData);
 
     const result = await makeTheRequest(formData, contractInfoId);
 

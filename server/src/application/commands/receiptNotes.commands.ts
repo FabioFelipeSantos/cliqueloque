@@ -72,10 +72,17 @@ export class ReceiptNotesCommands {
     const receiptNotes =
       await this.receiptNotesRepository.getReceiptByContract(contractInfoId);
 
-    if (!receiptNotes) {
-      throw new Error("Não há notas fiscais para este contrato");
+    return receiptNotes;
+  }
+
+  async findReceiptNotesById(id: string): Promise<ReceiptNotes> {
+    const receiptNote =
+      await this.receiptNotesRepository.findReceiptNotesById(id);
+
+    if (!receiptNote) {
+      throw new Error("Arquivo não encontrado");
     }
 
-    return receiptNotes;
+    return receiptNote;
   }
 }

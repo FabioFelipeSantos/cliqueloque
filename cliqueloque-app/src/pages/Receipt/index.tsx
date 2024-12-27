@@ -93,17 +93,18 @@ export default function Receipts() {
 
   async function handlingFormSubmission(values: ReceiptForm) {
     const contractInfo: IContractInfoCreate = {
-      receiptNumber: Number(values.receiptNumber),
+      receiptNumber: parseInt(values.receiptNumber, 10),
       emissionDate: values.emissionDate,
       finalDate: values.finalDate,
-      value: Number(values.receiptValue),
-      issqn: values.issqn === "" ? null : Number(values.issqn),
-      irrf: values.irrf === "" ? null : Number(values.irrf),
-      csll: values.csll === "" ? null : Number(values.csll),
-      cofins: values.cofins === "" ? null : Number(values.cofins),
-      inss: values.inss === "" ? null : Number(values.inss),
-      pis: values.pis === "" ? null : Number(values.pis),
-      calculatedWithholding: Number(values.receiptValue) * contract.withholding,
+      value: parseFloat(values.receiptValue),
+      issqn: values.issqn === "" ? null : parseFloat(values.issqn),
+      irrf: values.irrf === "" ? null : parseFloat(values.irrf),
+      csll: values.csll === "" ? null : parseFloat(values.csll),
+      cofins: values.cofins === "" ? null : parseFloat(values.cofins),
+      inss: values.inss === "" ? null : parseFloat(values.inss),
+      pis: values.pis === "" ? null : parseFloat(values.pis),
+      calculatedWithholding:
+        parseFloat(values.receiptValue) * contract.withholding,
       contractId: contract.id,
     };
 

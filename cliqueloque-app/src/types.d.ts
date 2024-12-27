@@ -70,7 +70,8 @@ declare interface IContractInfoServerResponse {
   erro: string;
 }
 
-interface IFile {
+declare interface IFile {
+  id: string;
   fileName: string;
   savedFileName: string;
   filePath: string;
@@ -83,4 +84,17 @@ declare interface IReceiptNotesServerResponse {
   message: string;
   file: IFile;
   erro: string;
+}
+
+declare interface IAllContractInfo {
+  contractInfo: IContractInfo | null;
+  receiptNotes: IFile[] | null;
+}
+
+declare interface IAllContractInfoServerResponse {
+  code: number;
+  status: string;
+  message: string;
+  allContractInfo: IAllContractInfo;
+  error: string;
 }

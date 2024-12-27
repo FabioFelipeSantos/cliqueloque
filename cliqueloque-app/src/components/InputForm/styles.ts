@@ -20,6 +20,10 @@ export const InputFormContainer = styled.div`
       color: red;
       outline-color: red;
       border: 1px solid red;
+
+      &:focus {
+        outline-color: red;
+      }
     }
 
     &:focus {

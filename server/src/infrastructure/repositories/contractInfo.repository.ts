@@ -41,4 +41,16 @@ export class ContractInfoRepositoryPrisma implements ContractInfoRepository {
 
     return contractInfo || null;
   }
+
+  async findContractInfoByContractId(
+    contractId: string,
+  ): Promise<ContractInfo | null> {
+    const contractInfo = await prisma.contractInfo.findFirst({
+      where: {
+        contractId,
+      },
+    });
+
+    return contractInfo || null;
+  }
 }

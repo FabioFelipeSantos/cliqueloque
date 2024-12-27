@@ -33,6 +33,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import ModalContractInfo from "@/components/ModalContracInfo";
 
 type ModalInfo = {
   message: string;
@@ -49,6 +50,9 @@ export default function Contracts() {
   const [selectedInputs, setSelectedInputs] = useState<IContract[]>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [modalInfo, setModalInfo] = useState<ModalInfo>({ message: "" });
+  const [isContractInfoModalOpen, setIsContractInfoModalOpen] = useState(true);
+  const [contractToShowInModal, setContractToShowInModal] =
+    useState<IContract | null>(null);
 
   useEffect(() => {
     setIsContractsLoaded(false);
@@ -126,44 +130,48 @@ export default function Contracts() {
               </TableHeader>
 
               <TableBody>
-                {contracts.map(
-                  (contract, index) =>
-                    !contract.hasInfo && (
-                      <TableRow
-                        key={contract.id}
-                        className={`${index % 2 === 0 ? "bg-[#eeea]" : "bg-[#ddda]"} hover:bg-[#dde]`}
+                {contracts.map((contract, index) => (
+                  <TableRow
+                    key={contract.id}
+                    className={`${index % 2 === 0 ? "bg-[#eeea]" : "bg-[#ddda]"} ${contract.hasInfo ? "bg-blue-200 text-red-800" : ""} hover:bg-[#dde]`}
+                  >
+                    <TableCell>
+                      <div className="flex items-center justify-center mx-2">
+                        <Checkbox
+                          className="size-6"
+                          disabled={contract.hasInfo}
+                          onCheckedChange={checked =>
+                            handlingChangeInput(checked, contract)
+                          }
+                        />
+                      </div>
+                    </TableCell>
+
+                    <TableCell className="w-4/12 text-left">
+                      {contract.title}
+                    </TableCell>
+
+                    <TableCell>{contract.code}</TableCell>
+
+                    <TableCell className="mx-[auto] flex justify-center">
+                      <div className="bg-[#2c70b9] w-9/12 text-white font-bold border-2 border-[#2c70b9]">
+                        {`${(contract.withholding * 100).toFixed(2).replace(/(.+)\.(.*)/, "$1,$2")}%`}
+                      </div>
+                    </TableCell>
+
+                    <TableCell>
+                      <Button
+                        className="bg-[#2c70b9] hover:bg-[#2288ff] px-3"
+                        onClick={() => {
+                          setContractToShowInModal(contract);
+                          setIsContractInfoModalOpen(true);
+                        }}
                       >
-                        <TableCell>
-                          <div className="flex items-center justify-center mx-2">
-                            <Checkbox
-                              className="size-6"
-                              onCheckedChange={checked =>
-                                handlingChangeInput(checked, contract)
-                              }
-                            />
-                          </div>
-                        </TableCell>
-
-                        <TableCell className="w-4/12 text-left">
-                          {contract.title}
-                        </TableCell>
-
-                        <TableCell>{contract.code}</TableCell>
-
-                        <TableCell className="mx-[auto] flex justify-center">
-                          <div className="bg-[#2c70b9] w-9/12 text-white font-bold border-2 border-[#2c70b9]">
-                            {`${(contract.withholding * 100).toFixed(2).replace(/(.+)\.(.*)/, "$1,$2")}%`}
-                          </div>
-                        </TableCell>
-
-                        <TableCell>
-                          <Button className="bg-[#2c70b9] hover:bg-[#2288ff] px-3">
-                            <Search />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ),
-                )}
+                        <Search />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
@@ -193,6 +201,15 @@ export default function Contracts() {
         <Header subtitle="Contratos Vinculados" company={company} />
         {renderingInfo()}
         <Footer />
+
+        {isContractInfoModalOpen && (
+          <ModalContractInfo
+            company={company}
+            contract={contractToShowInModal!}
+            isOpen={isContractInfoModalOpen}
+            overlayClick={() => setIsContractInfoModalOpen(false)}
+          />
+        )}
       </div>
 
       <AlertDialog open={openModal} onOpenChange={setOpenModal}>
