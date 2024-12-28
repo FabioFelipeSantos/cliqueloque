@@ -33,7 +33,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import ModalContractInfo from "@/components/ModalContracInfo";
+import ModalContractInfo from "@/components/ModalContractInfo";
 
 type ModalInfo = {
   message: string;
@@ -98,7 +98,20 @@ export default function Contracts() {
           <PulseSpinner />;
         </WithoutContractsInfo>
       );
-    } else if (!contracts) {
+    }
+
+    if (!contracts) {
+      return (
+        <WithoutContractsInfo>
+          <p>
+            Houve algum erro na solicitação dos dados. Por favor, contacte nosso
+            pessoal para mais informações.
+          </p>
+        </WithoutContractsInfo>
+      );
+    }
+
+    if (contracts.length === 0) {
       return (
         <WithoutContractsInfo>
           <p>

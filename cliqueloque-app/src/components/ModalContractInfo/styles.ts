@@ -65,8 +65,8 @@ export const ModalContractInfoStyle = styled.aside`
 
 type AroundBoxPros = {
   color: string;
-  titleSize: number;
-  leftPos?: number;
+  $titleSize: number;
+  $leftPos?: number;
 };
 
 export const AroundBox = styled.div<AroundBoxPros>`
@@ -80,11 +80,11 @@ export const AroundBox = styled.div<AroundBoxPros>`
   > h3 {
     width: fit-content;
     padding: 2px 16px;
-    font-size: ${props => `${props.titleSize}px`};
+    font-size: ${props => `${props.$titleSize}px`};
     font-weight: 700;
     background-color: #fff;
     position: absolute;
-    left: ${props => (props.leftPos ? `${props.leftPos}px` : "20px")};
+    left: ${props => (props.$leftPos ? `${props.$leftPos}px` : "20px")};
     top: 0;
     transform: translateY(-50%);
   }

@@ -59,7 +59,7 @@ export default function ModalContractInfo({
 
       <S.ModalContractInfoStyle className={isOpen ? "is-open" : ""}>
         <main>
-          <S.AroundBox color="#f008" titleSize={18}>
+          <S.AroundBox color="#f008" $titleSize={18}>
             <h2>Informações da Empresa e do Contrato</h2>
 
             <S.HeaderCompanyInfoModal>
@@ -102,19 +102,19 @@ export default function ModalContractInfo({
               <div>
                 <S.ReceiptNumbersAndDateContainer>
                   <div>
-                    <S.AroundBox color="#04f8" titleSize={16} leftPos={8}>
+                    <S.AroundBox color="#04f8" $titleSize={16} $leftPos={8}>
                       <h3>Número da Nota</h3>
                       <p>{contractInfo.receiptNumber}</p>
                     </S.AroundBox>
 
-                    <S.AroundBox color="#04f8" titleSize={16} leftPos={8}>
+                    <S.AroundBox color="#04f8" $titleSize={16} $leftPos={8}>
                       <h3>Valor da Nota</h3>
                       <p>{convertingToBrazilianCurrency(contractInfo.value)}</p>
                     </S.AroundBox>
                   </div>
 
                   <div>
-                    <S.AroundBox color="#04f8" titleSize={16} leftPos={8}>
+                    <S.AroundBox color="#04f8" $titleSize={16} $leftPos={8}>
                       <h3>Data Emissão</h3>
                       <p>
                         {new Date(contractInfo.emissionDate).toLocaleDateString(
@@ -122,7 +122,7 @@ export default function ModalContractInfo({
                         )}
                       </p>
                     </S.AroundBox>
-                    <S.AroundBox color="#04f8" titleSize={16} leftPos={8}>
+                    <S.AroundBox color="#04f8" $titleSize={16} $leftPos={8}>
                       <h3>Data Vencimento</h3>
                       <p>
                         {new Date(contractInfo.finalDate).toLocaleDateString(
@@ -135,7 +135,7 @@ export default function ModalContractInfo({
 
                 <S.AroundBox
                   color="#19fa"
-                  titleSize={18}
+                  $titleSize={18}
                   style={{ marginTop: "16px" }}
                 >
                   <h3>Informações Fiscais</h3>
@@ -147,13 +147,13 @@ export default function ModalContractInfo({
                         !nonTaxesInfo.includes(key) && (
                           <S.AroundBox
                             color="#98fa"
-                            titleSize={16}
-                            leftPos={4}
+                            $titleSize={16}
+                            $leftPos={4}
                             key={key}
                           >
                             <h3>
                               {key === "calculatedWithholding"
-                                ? "Rest. Técnica"
+                                ? "Rent. Técnica"
                                 : key.toUpperCase()}
                             </h3>
                             <p>{convertingToBrazilianCurrency(value)}</p>
@@ -164,7 +164,7 @@ export default function ModalContractInfo({
                 </S.AroundBox>
 
                 {receiptNotes && (
-                  <S.AroundBox color="#5a38" titleSize={16} leftPos={8}>
+                  <S.AroundBox color="#5a38" $titleSize={16} $leftPos={8}>
                     <h3>Recibos</h3>
 
                     <S.ReceiptNotesList>
@@ -177,13 +177,19 @@ export default function ModalContractInfo({
                           >
                             <FileDown color="#64f" />
                             <p>
-                              {note.fileName.length < 8
-                                ? note.fileName
-                                : [
-                                    note.fileName.slice(0, 8),
-                                    "... ",
-                                    note.fileName.slice(-4),
-                                  ].join("")}
+                              <span
+                                style={{
+                                  color: "#64f",
+                                  fontWeight: 700,
+                                  fontStyle: "italic",
+                                }}
+                              >
+                                {note.fileName.slice(-4)}
+                              </span>
+                              {"    -    "}
+                              {note.fileName.slice(0, -4).length < 25
+                                ? note.fileName.slice(0, -4)
+                                : [note.fileName.slice(0, 25), "... "].join("")}
                             </p>
                           </a>
                         </li>

@@ -76,7 +76,7 @@ export default function InputForm({ label, propsController }: InputProps) {
           textAlign: field.name === "receiptValue" ? "right" : "left",
         }}
         className={errors[`${field.name}`] ? "is-error" : ""}
-        type={inputsAsDate.includes(field.name) ? "date" : "string"}
+        type={inputsAsDate.includes(field.name) ? "date" : "text"}
         id={field.name}
         value={currentValue}
         onChange={handleOnChange}
