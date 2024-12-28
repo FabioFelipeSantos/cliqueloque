@@ -18,8 +18,10 @@ export default function InputForm({ label, propsController }: InputProps) {
   } = useController({ ...propsController, defaultValue: "" });
 
   const [currentValue, setCurrentValue] = useState<string>(value);
+  const [isFirstDigit, setIsFirstDigit] = useState(true);
 
   useEffect(() => {
+    console.log("Use effect");
     const newValue = value;
 
     if (inputsAsDate.includes(field.name)) return setCurrentValue(value);
@@ -52,11 +54,23 @@ export default function InputForm({ label, propsController }: InputProps) {
     const valueRemoved = event.target.value.replace(/[^0-9]/g, "");
 
     const sizeSlice = valueRemoved.length - 2;
-    const newValue = [
-      valueRemoved.slice(0, sizeSlice),
-      ".",
-      valueRemoved.slice(sizeSlice),
-    ].join("");
+
+    let newValue;
+
+    if (isFirstDigit) {
+      newValue = ["0.0", valueRemoved].join("");
+      setIsFirstDigit(false);
+    } else {
+      newValue = [
+        valueRemoved.slice(0, sizeSlice),
+        ".",
+        valueRemoved.slice(sizeSlice),
+      ].join("");
+    }
+
+    if (newValue === "." || newValue === "0.00") {
+      setIsFirstDigit(true);
+    }
 
     onChange({
       ...event,

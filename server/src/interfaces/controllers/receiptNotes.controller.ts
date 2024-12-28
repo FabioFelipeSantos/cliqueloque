@@ -19,6 +19,7 @@ export async function receiptNotesController(fastify: FastifyInstance) {
       }
 
       const { contractInfoId } = request.params;
+
       const newFile = {
         fileName: file.originalname,
         savedFileName: file.filename,
@@ -26,7 +27,7 @@ export async function receiptNotesController(fastify: FastifyInstance) {
         contractInfoId: contractInfoId,
       };
 
-      const arquivo = await receiptNotesCommands.create(newFile);
+      await receiptNotesCommands.create(newFile);
 
       return reply.code(200).send({
         code: 200,
@@ -64,7 +65,12 @@ export async function receiptNotesController(fastify: FastifyInstance) {
         const file =
           await receiptNotesCommands.findReceiptNotesById(receiptNoteId);
 
-        const filePath = path.resolve(file.filePath);
+        const filePath = path.resolve(
+          process.cwd(),
+          "temp",
+          "uploads",
+          file.savedFileName,
+        );
 
         if (!fs.existsSync(filePath)) {
           reply.code(400).send({
