@@ -10,7 +10,6 @@ export async function contractInfoController(fastify: FastifyInstance) {
 
   fastify.post<{ Body: ContractInfoCreate }>("/", async (request, reply) => {
     try {
-      console.log(request.body, typeof request.body);
       const { emissionDate, finalDate, ...otherProps } = request.body;
 
       const contractInfo = await contractInfoCommands.create({
