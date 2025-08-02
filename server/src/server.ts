@@ -18,6 +18,10 @@ app.register(contractControllers, { prefix: "/contracts" });
 app.register(contractInfoController, { prefix: "/contract-infos" });
 app.register(receiptNotesController, { prefix: "/uploads" });
 
+app.get("/", async (request, reply) => {
+  reply.code(200).send({ message: "Welcome to the CliqueLoque Server" });
+});
+
 app.listen({ port: 3333 }).then(() => {
   console.log("Server rodando em http://localhost:3333");
 });
